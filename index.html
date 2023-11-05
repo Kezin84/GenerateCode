@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .input-container {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #0074d9;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <title>Thông tin sản phẩm</title>
+</head>
+<body>
+    <div class="input-container">
+        <label for="soLuong">SỐ LƯỢNG</label>
+        <input type="number" id="soLuong" name="soLuong">
+    </div>
+
+    <div class="input-container">
+        <label for="donGia">ĐƠN GIÁ</label>
+        <input type="number" id="donGia" name="donGia">
+    </div>
+
+    <div class="input-container">
+        <label for="giaNhap">GIÁ NHẬP</label>
+        <input type="number" id="giaNhap" name="giaNhap">
+    </div>
+
+    <div class="input-container">
+        <label for="dienGiai">DIỄN GIẢI</label>
+        <input type="text" id="dienGiai" name="dienGiai">
+    </div>
+
+    <div class="input-container">
+        <label for="nhaCungCap">NHÀ CUNG CẤP</label>
+        <input type="text" id="nhaCungCap" name="nhaCungCap">
+    </div>
+
+    <div class="input-container">
+        <label for="traTien">TRẢ TIỀN</label>
+        <input type="number" id="traTien" name="traTien">
+    </div>
+
+
+    <button id="addDataButton">Thêm Dữ Liệu</button>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>SỐ LƯỢNG</th>
+                <th>GIÁ NHẬP</th>
+                <th>ĐƠN GIÁ</th>
+                <th>DIỄN GIẢI</th>
+                <th>TỔNG TIỀN</th>
+                <th>TRẢ TIỀN</th>
+                <th>NHÀ CUNG CẤP</th>
+                <th>MÃ GIÁ NHẬP</th>
+                <th>MÃ GIÁ BÁN</th>
+                <th>MÃ HÀNG</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Dòng dữ liệu sẽ được thêm sau -->
+        </tbody>
+        <tfoot>
+            <tr id="totalRow">
+                <td colspan="5" style="text-align: center;background-color:yellow">TỔNG TOA</td>
+                <td id="tongToa" style="text-align: center;background-color:yellow"></td>
+            </tr>
+            <tr id="totalRow"> 
+                <td colspan="5" style="text-align: center;background-color:yellow">TRẢ TIỀN</td>
+                <td id="tongTraTien" style="text-align: center;background-color:yellow"></td>
+            </tr>
+            <tr id="totalRow">
+                <td colspan="5" style="text-align: center;background-color:yellow">CÒN NỢ</td>
+                <td id="conNo" style="text-align: center;background-color:yellow"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <script>
+        document.getElementById('addDataButton').addEventListener('click', function() {
+            const soLuong = document.getElementById('soLuong').value;
+            const donGia = document.getElementById('donGia').value;
+            const giaNhap = document.getElementById('giaNhap').value;
+            const dienGiai = document.getElementById('dienGiai').value;
+            const nhaCungCap = document.getElementById('nhaCungCap').value;
+            const traTien=document.getElementById('traTien').value;
+            const tongTien=soLuong*donGia;
+            // Tạo một dòng mới cho bảng và thêm dữ liệu từ trường input
+            const tableBody = document.getElementById('tableBody');
+            const newRow = tableBody.insertRow(tableBody.rows.length);
+            
+            // Tạo các ô dữ liệu và gán giá trị từ input vào các ô tương ứng
+            const sttCell = newRow.insertCell(0);
+            sttCell.textContent = tableBody.rows.length;
+            
+            const soLuongCell = newRow.insertCell(1);
+            soLuongCell.textContent = soLuong;
+            
+            const giaNhapCell = newRow.insertCell(2);
+            giaNhapCell.textContent = giaNhap;
+            
+            const donGiaCell = newRow.insertCell(3);
+            donGiaCell.textContent = donGia;
+            
+            const dienGiaiCell = newRow.insertCell(4);
+            dienGiaiCell.textContent = dienGiai;
+            
+            const tongTienCell=newRow.insertCell(5);
+            tongTienCell.textContent=tongTien.toLocaleString();
+
+            const traTienCell= newRow.insertCell(6);
+            traTienCell.textContent=traTien.toLocaleString();
+
+            const nhaCungCapCell=newRow.insertCell(7);
+            nhaCungCapCell.textContent=nhaCungCap;
+            // Bạn có thể tính toán các cột khác như TỔNG TIỀN, MÃ GIÁ NHẬP, MÃ GIÁ BÁN, MÃ HÀNG ở đây
+
+            const maNhap = createMaNhap(nhaCungCap, giaNhap);
+            const maNhapCell = newRow.insertCell(8);
+                maNhapCell.textContent = maNhap;
+
+                const maGiaBan=createMaGiaBan(donGia);
+                const maGiaBanCell = newRow.insertCell(9);
+            maGiaBanCell.textContent = maGiaBan;
+
+            const maHang = createMaHang(nhaCungCap, dienGiai, donGia);
+    const maHangCell = newRow.insertCell(10);
+    maHangCell.textContent = maHang;
+    updateTotal();
+            clearForm();
+        });
+
+        
+        function clearForm() {
+            document.getElementById('soLuong').value = '';
+            document.getElementById('donGia').value = '';
+            document.getElementById('giaNhap').value = '';
+            document.getElementById('dienGiai').value = '';
+            document.getElementById('traTien').value = '';
+        }
+
+        function createMaNhap(nhaCungCap, giaNhap) {
+    const words = nhaCungCap.split(' ');
+
+    if (words.length === 1) {
+        // Nếu có một từ, lấy 2 chữ cái đầu
+        const nccAbbreviation = nhaCungCap.substr(0, 2);
+        const giaNhapMultiplier = giaNhap * 2;
+        return nccAbbreviation + '23' + giaNhapMultiplier + '.1';
+    } else {
+        // Nếu có nhiều từ, lấy các chữ cái đầu tiên của từng từ
+        const abbreviation = words.map(word => word.charAt(0)).join('');
+        const giaNhapMultiplier = giaNhap * 2;
+        return abbreviation + '23' + giaNhapMultiplier + '.1';
+    }
+}
+
+
+function createMaGiaBan(donGia) {
+    
+    const randomNumber = Math.floor(Math.random() * 10);
+    
+    // Lấy 2 số đầu tiên của đơn giá
+    const donGiaAbbreviation = donGia.substr(0, 2);
+    
+    // Cộng thêm 10 đơn vị
+    const giaBan = parseInt(donGiaAbbreviation) + 10;
+    const remainingDigits = donGia.substr(2);
+
+    return randomNumber + giaBan.toString()+remainingDigits;
+}
+
+function createMaHang(nhaCungCap, dienGiai, donGia) {
+    const nccWords = nhaCungCap.split(' ');
+    const dienGiaiWords = dienGiai.split(' ');
+
+    if (nccWords.length === 1) {
+        // Nếu tên nhà cung cấp có một từ, lấy 2 chữ cái đầu tiên
+        const nccAbbreviation = nhaCungCap.substr(0, 2);
+        return nccAbbreviation + dienGiaiWords.map(word => word.toUpperCase().charAt(0)).join('') + donGia;
+    } else {
+        // Nếu tên nhà cung cấp có nhiều từ, lấy chữ cái đầu tiên của từng từ
+        const nccAbbreviations = nccWords.map(word => word.charAt(0)).join('');
+        return nccAbbreviations + dienGiaiWords.map(word => word.toUpperCase().charAt(0)).join('') + donGia;
+    }
+}
+
+function updateTotal() {
+    const tableBody = document.getElementById('tableBody');
+    const tongTienElements = tableBody.querySelectorAll('td:nth-child(6)'); // Lấy tất cả các ô cột Tổng Tiền
+    const tongTraTienElements = tableBody.querySelectorAll('td:nth-child(7)');
+
+    let tongToa = 0;
+    let tongTraTien = 0;
+
+    tongTienElements.forEach(element => {
+        const tongTienValue = parseFloat(element.textContent.replace(/[^0-9.-]+/g, '')); // Loại bỏ ký tự không phải số
+        tongToa += tongTienValue;
+    });
+
+    tongTraTienElements.forEach(element => {
+        const tongTraTienValue = parseFloat(element.textContent.replace(/[^0-9.-]+/g, '')); // Loại bỏ ký tự không phải số
+        tongTraTien += tongTraTienValue;
+    });
+
+
+    const tongToaElement = document.getElementById('tongToa');
+    const tongTraTienElement = document.getElementById('tongTraTien');
+    const conNoElement = document.getElementById('conNo');
+
+    tongToaElement.textContent = tongToa.toLocaleString();
+    tongTraTienElement.textContent = tongTraTien.toLocaleString();
+    conNoElement.textContent = (tongToa - tongTraTien).toLocaleString();
+}
+
+
+
+
+</script>
+</body>
+</html>
